@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Upload Simple</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+    <div class="container">
+        <h1>Test de Upload Simple</h1>
+        <p>Esta es una prueba simple sin modales, solo para verificar que el upload funciona</p>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5>Prueba 1: Upload directo</h5>
+            </div>
+            <div class="card-body">
+                <form id="form1" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file1" class="form-label">Selecciona una imagen:</label>
+                        <input type="file" class="form-control" id="file1" name="test_file" accept="image/*">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="uploadForm('form1')">Subir</button>
+                </form>
+                <div id="result1" class="mt-3"></div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="card">
+            <div class="card-header">
+                <h5>Prueba 2: Drag & drop</h5>
+            </div>
+            <div class="card-body">
+                <div id="dropzone" style="border:2px dashed #ccc; padding:40px; text-align:center; cursor:pointer;">
+                    <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
+                </div>
+                <input type="file" id="file2" name="test_file" accept="image/*" style="display:none;">
+                <div id="result2" class="mt-3"></div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="card">
+            <div class="card-header">
+                <h5>Información del sistema</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Upload max filesize:</strong> <code id="upload_max">Cargando...</code></p>
+                <p><strong>Post max size:</strong> <code id="post_max">Cargando...</code></p>
+                <p><strong>File uploads:</strong> <code id="file_uploads">Cargando...</code></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function uploadForm(formId) {
+            const form = document.getElementById(formId);
+            const formData = new FormData(form);
+            const resultDiv = document.getElementById('result' + formId.slice(-1));
+
+            fetch('test_upload_simple.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                resultDiv.innerHTML = '<div class="alert alert-' + (data.recibido && data.movido ? 'success' : 'danger') + '">' +
+                    '<pre>' + JSON.stringify(data, null, 2) + '</pre>' +
+                    '</div>';
+            })
+            .catch(e => {
+                resultDiv.innerHTML = '<div class="alert alert-danger">Error: ' + e.message + '</div>';
+            });
+        }
+
+        // Drag and drop
+        const dropzone = document.getElementById('dropzone');
+        const fileInput2 = document.getElementById('file2');
+        const result2 = document.getElementById('result2');
+
+        dropzone.addEventListener('click', () => fileInput2.click());
+        
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = '#f0f0f0';
+        });
+        
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.style.backgroundColor = 'transparent';
+        });
+        
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = 'transparent';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput2.files = files;
+                const form = new FormData();
+                form.append('test_file', files[0]);
+                
+                fetch('test_upload_simple.php', {
+                    method: 'POST',
+                    body: form
+                })
+                .then(r => r.json())
+                .then(data => {
+                    result2.innerHTML = '<div class="alert alert-' + (data.recibido && data.movido ? 'success' : 'danger') + '">' +
+                        '<strong>' + (data.recibido && data.movido ? '✓ Archivo subido' : '✗ Error') + '</strong><br>' +
+                        '<pre>' + JSON.stringify(data, null, 2) + '</pre>' +
+                        '</div>';
+                });
+            }
+        });
+
+        // Cargar info del sistema
+        fetch('diagnostico.php')
+            .then(r => r.text())
+            .then(text => {
+                // Buscar valores en el HTML
+                const uploadMaxMatch = text.match(/upload_max_filesize.*?<strong>(\d+M)/);
+                const postMaxMatch = text.match(/post_max_size.*?<strong>(\d+M)/);
+                const fileUploadsMatch = text.match(/file_uploads.*?<strong>(On|Off)/);
+                
+                document.getElementById('upload_max').textContent = uploadMaxMatch ? uploadMaxMatch[1] : 'No encontrado';
+                document.getElementById('post_max').textContent = postMaxMatch ? postMaxMatch[1] : 'No encontrado';
+                document.getElementById('file_uploads').textContent = fileUploadsMatch ? fileUploadsMatch[1] : 'No encontrado';
+            });
+    </script>
+</body>
+</html>

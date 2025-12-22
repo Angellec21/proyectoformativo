@@ -1,0 +1,35 @@
+# Ignore vendor dependencies when using Composer
+/vendor/
+
+# Ignore generated invoices and other output
+/secciones/Pedidos/invoices/
+
+# Local config (do not commit your real credentials)
+/config.php
+/bd.php
+.env
+
+# Database files
+*.sql
+!tech_service_db.sql
+
+# Temporary and test files
+temp_*.php
+test_*.php
+debug_*.php
+tmp_*.php
+tmp_*.html
+
+# Archives and backups
+*.rar
+*.zip
+*.bak
+*.bak-*
+
+# IDEs, editors and system files
+/.idea/
+/.vscode/
+*.log
+*.tmp
+Thumbs.db
+node_modules/
