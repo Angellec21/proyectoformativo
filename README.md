@@ -69,7 +69,7 @@ $host = "localhost";
 $user = "root";
 $password = "";
 $database = "tech_service";
-
+```
 Abrir el proyecto en Visual Studio Code
 
 Abrir Visual Studio Code.
@@ -113,3 +113,4 @@ El proyecto se ejecuta en un entorno local.
 Para su publicación en internet, se requiere un servicio de hosting compatible con PHP y MySQL.
 
 Proyecto desarrollado con PHP, MySQL y XAMPP.
+
