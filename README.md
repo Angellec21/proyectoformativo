@@ -70,3 +70,46 @@ $user = "root";
 $password = "";
 $database = "tech_service";
 
+Abrir el proyecto en Visual Studio Code
+
+Abrir Visual Studio Code.
+
+Seleccionar Archivo > Abrir carpeta.
+
+Navegar hasta la ruta:
+
+C:\xampp\htdocs\tech-service
+
+
+Abrir la carpeta del proyecto.
+
+Ejecución del proyecto
+
+Abrir el navegador web.
+
+Ingresar la siguiente URL:
+
+http://localhost/tech-service
+
+
+Si existe un archivo index.php, el sistema se cargará automáticamente.
+
+Verificación del funcionamiento
+
+La página debe cargarse correctamente.
+
+En caso de errores, verificar:
+
+Que Apache y MySQL estén activos.
+
+Que la carpeta esté correctamente ubicada en htdocs.
+
+Que la conexión a la base de datos sea correcta.
+
+Notas finales
+
+El proyecto se ejecuta en un entorno local.
+
+Para su publicación en internet, se requiere un servicio de hosting compatible con PHP y MySQL.
+
+Proyecto desarrollado con PHP, MySQL y XAMPP.
